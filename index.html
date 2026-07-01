@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Самый красивый город — куда пойти</title>
+  <!-- Подключаем современный шрифт для атмосферы -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Raleway', sans-serif;
+      background: #faf7f2;
+      color: #2e2a24;
+      line-height: 1.5;
+      scroll-behavior: smooth;
+    }
+
+    /* Типографика и атмосфера */
+    h1, h2, h3, .serif {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+
+    /* Шапка-герой */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(120deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.1) 60%), 
+                  url('https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=2073&auto=format&fit=crop') center/cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .hero-content {
+      background: rgba(20, 20, 20, 0.55);
+      backdrop-filter: blur(8px);
+      padding: 2.5rem 3rem;
+      border-radius: 32px;
+      max-width: 800px;
+      box-shadow: 0 25px 45px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+
+    .hero h1 {
+      font-size: 4.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 4px 12px rgba(0,0,0,0.5);
+      line-height: 1.1;
+    }
+
+    .hero .subtitle {
+      font-size: 1.8rem;
+      font-style: italic;
+      font-family: 'Playfair Display', serif;
+      margin-bottom: 1rem;
+      font-weight: 400;
+      text-shadow: 1px 2px 8px rgba(0,0,0,0.6);
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      font-weight: 300;
+      max-width: 550px;
+      margin: 0 auto;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+    }
+
+    .scroll-down {
+      position: absolute;
+      bottom: 30px;
+      font-size: 2rem;
+      color: white;
+      animation: bounce 2s infinite;
+      opacity: 0.9;
+      cursor: pointer;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-12px); }
+      60% { transform: translateY(-6px); }
+    }
+
+    /* Навигация по городам (якоря) */
+    .city-nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      padding: 2rem 1rem;
+      background: #fffaf2;
+      border-bottom: 1px solid #e5d9cc;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(6px);
+      background: rgba(255, 250, 242, 0.9);
+    }
+
+    .city-nav a {
+      text-decoration: none;
+      font-weight: 500;
+      color: #4a3b2f;
+      padding: 0.5rem 1.5rem;
+      border-radius: 40px;
+      background: #efe5d8;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      letter-spacing: 0.3px;
+      border: 1px solid transparent;
+    }
+
+    .city-nav a:hover {
+      background: #d4b48c;
+      color: #2b1f14;
+      border-color: #b28b5b;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 14px rgba(0,0,0,0.1);
+    }
+
+    /* Основной контейнер */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .city-section {
+      margin-bottom: 6rem;
+      scroll-margin-top: 100px;
+    }
+
+    .city-header {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      border-left: 8px solid #c9a87c;
+      padding-left: 1.5rem;
+    }
+
+    .city-header h2 {
+      font-size: 3.2rem;
+      color: #2e241a;
+    }
+
+    .city-header .location {
+      font-size: 1.3rem;
+      font-weight: 300;
+      color: #7f6a55;
+      font-style: italic;
+    }
+
+    /* Карточки достопримечательностей */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 18px 30px -12px rgba(0,0,0,0.15);
+      transition: all 0.35s ease;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      border: 1px solid #f0e3d5;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 30px 40px -15px rgba(80, 50, 20, 0.25);
+    }
+
+    .card-img {
+      height: 230px;
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.5s;
+    }
+
+    .card:hover .card-img {
+      transform: scale(1.04);
+    }
+
+    .card-content {
+      padding: 1.6rem 1.4rem 1.8rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-content h3 {
+      font-size: 1.7rem;
+      margin-bottom: 0.7rem;
+      color: #3d2e1f;
+    }
+
+    .card-content .place-type {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #b08968;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+    }
+
+    .card-content p {
+      color: #4f4338;
+      font-weight: 400;
+      margin-bottom: 1.2rem;
+      flex: 1;
+    }
+
+    .btn-why {
+      align-self: flex-start;
+      background: transparent;
+      border: 1.5px solid #b5956b;
+      color: #5e3e22;
+      padding: 0.5rem 1.3rem;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: 0.25s;
+      cursor: default;
+      background: #fefaf5;
+    }
+
+    .btn-why:hover {
+      background: #b5956b;
+      color: white;
+      border-color: #b5956b;
+    }
+
+    /* Цитата / атмосфера */
+    .quote-block {
+      background: #f3ede5;
+      border-radius: 40px;
+      padding: 2.5rem;
+      margin: 3rem 0 1.5rem;
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      font-style: italic;
+      color: #4d3826;
+      box-shadow: inset 0 0 0 2px #ffffff, 0 12px 18px -10px rgba(0,0,0,0.1);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2.5rem;
+      background: #e6dbcd;
+      color: #3b3126;
+      font-size: 0.95rem;
+      margin-top: 2rem;
+    }
+
+    /* Адаптив */
+    @media (max-width: 650px) {
+      .hero h1 {
+        font-size: 3rem;
+      }
+      .hero .subtitle {
+        font-size: 1.4rem;
+      }
+      .hero-content {
+        padding: 1.8rem;
+      }
+      .city-header h2 {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Главный экран -->
+  <div class="hero">
+    <div class="hero-content">
+      <h1>Самый красивый город</h1>
+      <div class="subtitle">куда можно пойти</div>
+      <p>Архитектура, улочки, закаты и вдохновение — три города, которые остаются в сердце навсегда.</p>
+    </div>
+    <div class="scroll-down">↓</div>
+  </div>
+
+  <!-- Навигация по городам -->
+  <div class="city-nav">
+    <a href="#paris">Париж</a>
+    <a href="#prague">Прага</a>
+    <a href="#florence">Флоренция</a>
+    <a href="#beyond">Ещё идеи</a>
+  </div>
+
+  <div class="container">
+    
+    <!-- ПАРИЖ -->
+    <section id="paris" class="city-section">
+      <div class="city-header">
+        <h2>Париж</h2>
+        <span class="location">Франция</span>
+      </div>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-img" style="background-image: url('https://resize.tripster.ru/QMt-yoh5Is9d_1JVe2gdY0djfV0=/fit-in/1080x810/filters:no_upscale()/https://cdn.tripster.ru/photos/120caf1b-242a-407c-8cef-d2513eb3de45.jpg');"></div>
+          <div class="card-content">
+            <div class="place-type">Культура и виды</div>
+            <h3>Монмартр</h3>
+            <p>Холм с базиликой Сакре-Кёр, художниками и мощёными лестницами. Лучший закат на город.</p>
+            <span class="btn-why">✨ Идти ради атмосферы</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-img" style="background-image: url('https://avatars.mds.yandex.net/i?id=f00038f4b8179635a784db0cde2e3c04_l-5246802-images-thumbs&n=13');"></div>
+          <div class="card-content">
+            <div class="place-type">Прогулки</div>
+            <h3>Набережная Сены</h3>
+            <p>Букинисты, мосты и вид на Нотр-Дам. Идеально для неспешной прогулки с круассаном.</p>
+            <span class="btn-why">🥐 Романтика в каждом шаге</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-img" style="background-image: url('https://avatars.mds.yandex.net/i?id=8a2d05b3b345e53f4e70bce8d486887c_l-4264709-images-thumbs&n=13');"></div>
+          <div class="card-content">
+            <div class="place-type">Садовая архитектура</div>
+            <h3>Люксембургский сад</h3>
+            <p>Зелёные стулья, фонтаны и цветущие аллеи. Место, где время замедляется.</p>
+            <span class="btn-why">📖 Читать и мечтать</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ПРАГА -->
+    <section id="prague" class="city-section">
+      <div class="city-header">
+        <h2>Прага</h2>
+        <span class="location">Чехия</span>
+      </div>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-img" style="background-image: url('https://avatars.mds.yandex.net/i?id=9ab696f2826fd15c9edb15e4235a2e5f_l-3737438-images-thumbs&n=13');"></div>
+          <div class="card-content">
+            <div class="place-type">Исторический центр</div>
+            <h3>Карлов мост</h3>
+            <p>Особенно на рассвете, когда скульптуры окутаны туманом, а город только просыпается.</p>
+            <span class="btn-why">🌅 Магия утра</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-img" style="background-image: url('https://timetraveling.ru/images/Petrin%20holm%20-%20Prajskiy%20Hrad/petrshin.jpg');"></div>
+          <div class="card-content">
+            <div class="place-type">Смотровая площадка</div>
+            <h3>Петршин холм</h3>
+            <p>Зелёный оазис с копией Эйфелевой башни. Вид на красные крыши и Влтаву.</p>
+            <span class="btn-why">🌿 Панорама старого города</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-img" style="background-image: url('https://avatars.mds.yandex.net/i?id=0bfae7dda1f9ccbe1c60e321a2da709a_l-4591118-images-thumbs&n=13');"></div>
+          <div class="card-content">
+            <div class="place-type">Уютные улочки</div>
+            <h3>Мала Страна</h3>
+            <p>Извилистые переулки, барочные дворцы и тихие сады под Пражским градом.</p>
+            <span class="btn-why">🏮 Сказочный лабиринт</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ФЛОРЕНЦИЯ -->
+    <section id="florence" class="city-section">
+      <div class="city-header">
+        <h2>Флоренция</h2>
+        <span class="location">Италия</span>
+      </div>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-img" style="background-image: url('https://avatars.mds.yandex.net/i?id=261ee7ca97cf9263009f9bf1294e5366_l-4078058-images-thumbs&n=13');"></div>
+          <div class="card-content">
+            <div class="place-type">Искусство и панорама</div>
+            <h3>Площадь Микеланджело</h3>
+            <p>Открыточный вид на Дуомо, Понте Веккьо и холмы. Закат здесь — искусство.</p>
+            <span class="btn-why">🎨 Вдохновение Ренессанса</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-img" style="background-image: url('https://tantum-verde.net/upload/img/img_user/28/shutterstock_337520657.jpg');"></div>
+          <div class="card-content">
+            <div class="place-type">Архитектурное чудо</div>
+            <h3>Собор Санта-Мария-дель-Фьоре</h3>
+            <p>Поднимитесь на купол Брунеллески — город как на ладони и фрески внутри.</p>
+            <span class="btn-why">⛪ Вершина красоты</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-img" style="background-image: url('https://media-cdn.tripadvisor.com/media/photo-s/0a/2c/0a/ba/photo4jpg.jpg');"></div>
+          <div class="card-content">
+            <div class="place-type">Гастрономия и рынок</div>
+            <h3>Меркато Чентрале</h3>
+            <p>Двухэтажный рынок с тосканскими продуктами, пастой и бокалом кьянти.</p>
+            <span class="btn-why">🍷 Вкус Италии</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- БОНУС: еще направления -->
+    <section id="beyond" class="city-section">
+      <div class="quote-block">
+        “Красота города — в его умении рассказывать истории. Выберите свою.”
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 1.2rem; justify-content: center; margin-top: 2rem;">
+        <span style="background: #d9c5ad; padding: 0.6rem 2rem; border-radius: 30px; font-weight: 500;">🌆 Барселона</span>
+        <span style="background: #d9c5ad; padding: 0.6rem 2rem; border-radius: 30px; font-weight: 500;">🏰 Эдинбург</span>
+        <span style="background: #d9c5ad; padding: 0.6rem 2rem; border-radius: 30px; font-weight: 500;">🌸 Киото</span>
+        <span style="background: #d9c5ad; padding: 0.6rem 2rem; border-radius: 30px; font-weight: 500;">🌊 Санкт-Петербург</span>
+      </div>
+      <p style="text-align: center; margin-top: 2rem; font-size: 1.1rem; color: #5b4a39;">Каждый из этих городов достоин звания самого красивого. Всё зависит от настроения.</p>
+    </section>
+  </div>
+
+  <footer>
+    <p>© 2025 Самый красивый город — куда можно пойти. Вдохновение для путешествий.</p>
+    <p style="font-size: 0.9rem; margin-top: 0.4rem; opacity: 0.8;">Создано с любовью к архитектуре и прогулкам.</p>
+  </footer>
+</body>
+</html>
